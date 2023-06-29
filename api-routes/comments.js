@@ -1,11 +1,36 @@
-export const getComments = () => {
-  //Handle get all comments
-};
+const { supabase } = require("../lib/supabaseClient");
 
-export const addComment = () => {
-  //Handle add comment here
-};
+export async function getComments() {
+  const { data, error } = await supabase
+    .from('Comments')
+    .select('*');
 
-export const removeComment = () => {
-  //Handle remove comment here
-};
+  if(error) throw error;
+
+  return data;
+}
+
+export async function addComment(commentData) {
+  const newComment = {
+    id: crypto.randomUUID(),
+    ...commentData
+  }
+  const { data, error } = await supabase
+    .from('Comments')
+    .insert([newComment]);
+
+  if(error) throw error;
+
+  return data;
+}
+
+export async function removeComment(commentId) {
+  const { data, error } = await supabase
+    .from('Comments')
+    .delete()
+    .eq('id', commentId);
+
+  if(error) throw error;
+
+  return data;
+}
