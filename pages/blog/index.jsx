@@ -25,7 +25,7 @@ export default function Blog() {
     <section>
       <Heading>Blog</Heading>
       {posts.map((post) => (
-        <Link key={post.slug} href={`/blog/${post.slug}`}>
+        <Link key={post.slug} href={`/blog/${post.slug}`} passHref>
           <div className={styles.link}>
             <div className="w-full flex flex-col">
               <p>{post.title}</p>

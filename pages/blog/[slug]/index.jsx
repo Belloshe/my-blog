@@ -27,7 +27,7 @@ export default function BlogPost() {
       if (error) console.log("Error fetching post: ", error);
       if (data && data.length > 0) {
         const post = data[0];
-        console.log(post)
+        console.log(post);
         setPost(post);
       }
     };
@@ -42,7 +42,7 @@ export default function BlogPost() {
 
     fetchPost();
     fetchUser();
-  }, [slug, supabase.auth]);
+  }, [slug, supabase, supabase.auth]);
 
   if (!post) return <p>Loading...</p>;
 
@@ -51,9 +51,9 @@ export default function BlogPost() {
       .from("Posts")
       .delete()
       .eq("id", post.id);
-      
+
     if (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     } else {
       router.push("/blog");
     }

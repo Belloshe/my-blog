@@ -1,16 +1,26 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { createClient } from '@supabase/supabase-js';
 
-export async function GET(request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
-  console.log(request.url)
-  if (code) {
-    const supabase = createRouteHandlerClient({ cookies })
-    await supabase.auth.exchangeCodeForSession(code)
-  }
+export default function CallbackRoute() {
+  const router = useRouter();
+  const { code } = router.query;
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin)
+  useEffect(() => {
+    async function handleCodeExchange() {
+      if (code) {
+        const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANONYMOUS_KEY);
+        await supabase.auth.signIn({
+          provider: 'google',
+          code,
+        });
+
+        router.push('/dashboard');
+      }
+    }
+
+    handleCodeExchange();
+  }, [code, router]);
+
+  return null; 
 }

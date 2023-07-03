@@ -38,6 +38,7 @@ export default function Navbar() {
                 <Link
                   key={path}
                   href={path}
+                  passHref // Add passHref prop here
                   className={classNames(styles.navigationItem, {
                     [styles.textNeutral]: !isActive,
                     [styles.fontBold]: isActive,
